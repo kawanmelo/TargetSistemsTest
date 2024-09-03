@@ -9,6 +9,6 @@ namespace Question3_Faturamento.Entities
     internal class FaturamentoDiario
     {
         public int dia { get; set; }
-        public Decimal valor { get; set; }
+        public decimal valor { get; set; }
     }
 }
