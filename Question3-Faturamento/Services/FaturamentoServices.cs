@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Question3_Faturamento.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http.Headers;
@@ -7,57 +8,33 @@ using System.Threading.Tasks;
 
 namespace Question3_Faturamento.Services
 {
-    internal class FaturamentoServices
+    internal class FaturamentoServices : IFaturamentoServices
     {
-        public static decimal GetSmaller(decimal[] faturamento)
+        public decimal GetSmaller(FaturamentoDiario[] faturamentosDiarios)
         {
-            decimal[] faturamentoTemp = faturamento;
-            Array.Sort(faturamentoTemp);
-            foreach (decimal value in  faturamentoTemp)
-            {
-                if(value != 0)
-                {
-                    return value;
-                }
-            }
-            return 0;
+            var day = faturamentosDiarios
+                .Where(x => x.valor != 0)
+                .MinBy(x => x.valor);
+            return day.valor;
         }
 
-        public static decimal GetBigger(decimal[] faturamento)
+        public decimal GetBigger(FaturamentoDiario[] faturamentosDiarios)
         {
-            decimal[] faturamentoTemp = faturamento;
-            Array.Sort(faturamentoTemp);
-            return faturamentoTemp[faturamentoTemp.Length - 1];
+            var day = faturamentosDiarios.MaxBy(x => x.valor);
+            return day.valor;
         }
 
-        public static decimal GetAverage(decimal[] faturamento)
+        public decimal GetAverage(FaturamentoDiario[] faturamentosDiarios)
         {
-            decimal totalValue = 0;
-            int daysOn = 0;
-            foreach(decimal value in faturamento)
-            {
-                if(value != 0)
-                {
-                    totalValue += value;
-                    daysOn++;
-                }
-            }
-            return totalValue/daysOn;
+            return faturamentosDiarios
+                .Where(x => x.valor != 0)
+                .Average(x => x.valor);
         }
 
-        public static int GetDaysAboveAverage(decimal[] faturamento)
+        public int GetDaysAboveAverage(FaturamentoDiario[] faturamentosDiarios)
         {
-            decimal average = GetAverage(faturamento);
-            int daysAbove = 0;
-            
-            foreach(decimal value in faturamento)
-            {
-                if (value > average)
-                {
-                    daysAbove++;
-                }
-            }
-            return daysAbove;
+            decimal average = GetAverage(faturamentosDiarios);
+            return faturamentosDiarios.Where(x => x.valor > average).Count();
         }
     }
 }

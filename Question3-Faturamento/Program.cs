@@ -9,13 +9,15 @@ namespace Question3_Faturamento
     {
         static void Main(string[] args)
         {
-            var jsonString = File.ReadAllText("C:\\Users\\Kawan Melo\\source\\repos\\TargetSistemsTest\\Question3-Faturamento\\faturamento.json");
-            FaturamentoMensal faturamentoMensal = JsonSerializer.Deserialize<FaturamentoMensal>(jsonString);
+            var jsonString = File.ReadAllText("C:\\Users\\Kawan Melo\\source\\repos\\TargetSistemsTest\\Question3-Faturamento\\dados.json");
+            FaturamentoDiario[] vetorFaturamentos = JsonSerializer.Deserialize<FaturamentoDiario[]>(jsonString);
 
-            Console.WriteLine($"Média do faturamento mensal : {FaturamentoServices.GetAverage(faturamentoMensal.FaturamentosDiario)}");
-            Console.WriteLine($"Maior faturamento : {FaturamentoServices.GetBigger(faturamentoMensal.FaturamentosDiario)}");
-            Console.WriteLine($"Menor faturamento : {FaturamentoServices.GetSmaller(faturamentoMensal.FaturamentosDiario)}");
-            Console.WriteLine($"Dias em que o faturamento foi acima da média mensal : {FaturamentoServices.GetDaysAboveAverage(faturamentoMensal.FaturamentosDiario)}");
+            IFaturamentoServices faturamentoServices = new FaturamentoServices();
+
+            Console.WriteLine($"Média do faturamento mensal : {faturamentoServices.GetAverage(vetorFaturamentos)}");
+            Console.WriteLine($"Maior faturamento : {faturamentoServices.GetBigger(vetorFaturamentos)}");
+            Console.WriteLine($"Menor faturamento : {faturamentoServices.GetSmaller(vetorFaturamentos)}");
+            Console.WriteLine($"Dias em que o faturamento foi acima da média mensal : {faturamentoServices.GetDaysAboveAverage(vetorFaturamentos)} dias");
         }
     }
 }
